@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cart — StyleHub</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f5f5f5; }
+    header { background: #1a1a2e; color: white; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 24px; }
+    nav a { color: white; text-decoration: none; margin-left: 20px; font-size: 14px; }
+    .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+    .back { display: inline-block; margin-bottom: 20px; color: #1a1a2e; text-decoration: none; font-size: 14px; }
+    h2 { font-size: 24px; margin-bottom: 24px; }
+    .cart-item { background: white; border-radius: 12px; padding: 20px; margin-bottom: 16px; display: flex; align-items: center; gap: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .cart-item .emoji { font-size: 40px; width: 60px; text-align: center; }
+    .cart-item .info { flex: 1; }
+    .cart-item .info h3 { font-size: 16px; margin-bottom: 4px; }
+    .cart-item .info .price { color: #1a1a2e; font-weight: bold; }
+    .cart-item .info .category { font-size: 12px; color: #888; }
+    .qty-form { display: flex; align-items: center; gap: 8px; }
+    .qty-form input { width: 50px; padding: 6px; border: 1px solid #ddd; border-radius: 6px; text-align: center; font-size: 14px; }
+    .qty-form button { padding: 6px 12px; background: #1a1a2e; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; }
+    .remove { color: #ef4444; text-decoration: none; font-size: 13px; font-weight: 600; }
+    .remove:hover { color: #dc2626; }
+    .subtotal { font-size: 15px; font-weight: bold; min-width: 80px; text-align: right; }
+    .summary { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .summary .row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 15px; }
+    .summary .total { font-size: 22px; font-weight: bold; color: #1a1a2e; border-top: 1px solid #eee; padding-top: 16px; margin-top: 8px; }
+    .checkout-btn { display: block; text-align: center; padding: 16px; background: #1a1a2e; color: white; text-decoration: none; border-radius: 10px; font-size: 16px; font-weight: bold; margin-top: 16px; }
+    .checkout-btn:hover { background: #16213e; }
+    .empty { text-align: center; padding: 80px 20px; color: #888; }
+    .empty .emoji { font-size: 64px; margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>👗 StyleHub</h1>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/cart/">Cart 🛒</a>
+  </nav>
+</header>
+
+<div class="container">
+  <a href="/" class="back">← Continue Shopping</a>
+  <h2>🛒 Your Cart</h2>
+
+  {% if items %}
+    {% for item in items %}
+    <div class="cart-item">
+      <div class="emoji">👕</div>
+      <div class="info">
+        <h3>{{ item.product.name }}</h3>
+        <div class="category">{{ item.product.category }} · Size: {{ item.product.sizes }}</div>
+        <div class="price">S${{ item.product.price }}</div>
+      </div>
+      <form method="POST" action="/update-quantity/{{ item.pk }}/" class="qty-form">
+        {% csrf_token %}
+        <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="10">
+        <button type="submit">Update</button>
+      </form>
+      <div class="subtotal">S${{ item.get_subtotal }}</div>
+      <a href="/remove-from-cart/{{ item.pk }}/" class="remove">✕ Remove</a>
+    </div>
+    {% endfor %}
+
+    <div class="summary">
+      <div class="row">
+        <span>Subtotal</span>
+        <span>S${{ cart.get_total }}</span>
+      </div>
+      <div class="row">
+        <span>Shipping</span>
+        <span>Free</span>
+      </div>
+      <div class="row total">
+        <span>Total</span>
+        <span>S${{ cart.get_total }}</span>
+      </div>
+      <a href="/checkout/" class="checkout-btn">Proceed to Checkout →</a>
+    </div>
+
+  {% else %}
+    <div class="empty">
+      <div class="emoji">🛒</div>
+      <div style="font-size:18px;font-weight:600;margin-bottom:8px;">Your cart is empty</div>
+      <div style="margin-bottom:20px;">Add some products to get started</div>
+      <a href="/" style="padding:12px 24px;background:#1a1a2e;color:white;text-decoration:none;border-radius:10px;">Browse Products</a>
+    </div>
+  {% endif %}
+
+</div>
+
+</body>
+</html>

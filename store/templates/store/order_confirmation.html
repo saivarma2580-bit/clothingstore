@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Order Confirmed — StyleHub</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f5f5f5; }
+    header { background: #1a1a2e; color: white; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 24px; }
+    nav a { color: white; text-decoration: none; margin-left: 20px; font-size: 14px; }
+    .container { max-width: 600px; margin: 60px auto; padding: 0 20px; }
+    .card { background: white; border-radius: 16px; padding: 40px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); text-align: center; }
+    .icon { font-size: 64px; margin-bottom: 20px; }
+    h2 { font-size: 26px; color: #1a1a2e; margin-bottom: 10px; }
+    .sub { color: #666; margin-bottom: 30px; font-size: 15px; }
+    .details { text-align: left; background: #f8fafc; border-radius: 10px; padding: 20px; margin-bottom: 24px; }
+    .details .row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 14px; border-bottom: 1px solid #eee; }
+    .details .row:last-child { border-bottom: none; }
+    .details .label { color: #888; }
+    .total { display: flex; justify-content: space-between; font-size: 18px; font-weight: bold; color: #1a1a2e; padding-top: 16px; }
+    .btn { display: inline-block; padding: 14px 32px; background: #1a1a2e; color: white; text-decoration: none; border-radius: 10px; font-size: 15px; font-weight: bold; }
+    .btn:hover { background: #16213e; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>👗 StyleHub</h1>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/cart/">Cart 🛒</a>
+  </nav>
+</header>
+
+<div class="container">
+  <div class="card">
+    <div class="icon">✅</div>
+    <h2>Order Confirmed!</h2>
+    <p class="sub">Thank you {{ order.first_name }}! Your order #{{ order.pk }} has been placed successfully.</p>
+
+    <div class="details">
+      {% for item in order.items.all %}
+      <div class="row">
+        <span>{{ item.product.name }} × {{ item.quantity }}</span>
+        <span>S${{ item.get_subtotal }}</span>
+      </div>
+      {% endfor %}
+      <div class="total">
+        <span>Total</span>
+        <span>S${{ order.total }}</span>
+      </div>
+    </div>
+
+    <div style="margin-bottom:16px;font-size:14px;color:#666;">
+      📧 Confirmation sent to <strong>{{ order.email }}</strong><br>
+      📦 Shipping to {{ order.address }}, {{ order.city }}
+    </div>
+
+    <a href="/" class="btn">Continue Shopping →</a>
+  </div>
+</div>
+
+</body>
+</html>
