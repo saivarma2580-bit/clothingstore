@@ -114,44 +114,42 @@
 <script>
   // Split text into individual letters
   const heroText = document.getElementById('heroText');
-  const text = heroText.innerText;
-  heroText.innerHTML = text.split('').map(char =>
-    char === ' ' ? '<span>&nbsp;</span>' : `<span>${char}</span>`
-  ).join('');
+  if (heroText) {
+    const text = heroText.innerText.trim();
+    heroText.innerHTML = text.split('').map(char =>
+      char === ' ' ? '<span style="display:inline-block;">&nbsp;</span>' : `<span style="display:inline-block;">${char}</span>`
+    ).join('');
 
-  // Magnetic effect
-  const letters = heroText.querySelectorAll('span');
+    const letters = heroText.querySelectorAll('span');
 
-  document.addEventListener('mousemove', (e) => {
-    letters.forEach(letter => {
-      const rect = letter.getBoundingClientRect();
-      const letterX = rect.left + rect.width / 2;
-      const letterY = rect.top + rect.height / 2;
+    document.addEventListener('mousemove', (e) => {
+      letters.forEach(letter => {
+        const rect = letter.getBoundingClientRect();
+        const letterX = rect.left + rect.width / 2;
+        const letterY = rect.top + rect.height / 2;
 
-      const distX = e.clientX - letterX;
-      const distY = e.clientY - letterY;
-      const distance = Math.sqrt(distX * distX + distY * distY);
+        const distX = e.clientX - letterX;
+        const distY = e.clientY - letterY;
+        const distance = Math.sqrt(distX * distX + distY * distY);
 
-      const maxDist = 150;
-      if (distance < maxDist) {
-        const force = (maxDist - distance) / maxDist;
-        const moveX = -distX * force * 0.4;
-        const moveY = -distY * force * 0.4;
-        letter.style.transform = `translate(${moveX}px, ${moveY}px)`;
-        letter.style.color = `rgba(167, 139, 250, ${force})`;
-      } else {
-        letter.style.transform = 'translate(0, 0)';
-        letter.style.color = 'white';
-      }
+        const maxDist = 150;
+        if (distance < maxDist) {
+          const force = (maxDist - distance) / maxDist;
+          const moveX = -distX * force * 0.4;
+          const moveY = -distY * force * 0.4;
+          letter.style.transform = `translate(${moveX}px, ${moveY}px)`;
+          letter.style.color = `rgba(167, 139, 250, ${force + 0.3})`;
+        } else {
+          letter.style.transform = 'translate(0, 0)';
+          letter.style.color = 'white';
+        }
+      });
     });
-  });
+  }
 
-  // Reset when mouse leaves
-  document.addEventListener('mouseleave', () => {
-    letters.forEach(letter => {
-      letter.style.transform = 'translate(0, 0)';
-      letter.style.color = 'white';
-    });
+  // Fix product cards - remove any transform interference
+  document.querySelectorAll('.card').forEach(card => {
+    card.style.transform = '';
   });
 </script>
 </body>
