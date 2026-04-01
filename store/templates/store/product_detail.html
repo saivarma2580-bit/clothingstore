@@ -56,8 +56,15 @@
   </div>
 </div>
 <script>
-  const magneticLetters = document.querySelectorAll('.magnetic-text span');
+  // Fill product title with letters
+  const title = "{{ product.name }}";
+  const titleEl = document.getElementById('productTitle');
+  titleEl.innerHTML = title.split('').map(c =>
+    c === ' ' ? '<span>&nbsp;</span>' : `<span>${c}</span>`
+  ).join('');
 
+  // Magnetic effect
+  const magneticLetters = document.querySelectorAll('.magnetic-text span');
   document.addEventListener('mousemove', (e) => {
     magneticLetters.forEach(letter => {
       const rect = letter.getBoundingClientRect();
