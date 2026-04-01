@@ -56,15 +56,10 @@
   </div>
 </div>
 <script>
-  // Split product name into letters
-  const title = "{{ product.name }}";
-  const titleEl = document.getElementById('productTitle');
-  titleEl.innerHTML = title.split('').map(c =>
-    c === ' ' ? '<span>&nbsp;</span>' : `<span>${c}</span>`
-  ).join('');
+  const magneticLetters = document.querySelectorAll('.magnetic-text span');
 
-  document.querySelectorAll('.magnetic-text span').forEach(letter => {
-    document.addEventListener('mousemove', (e) => {
+  document.addEventListener('mousemove', (e) => {
+    magneticLetters.forEach(letter => {
       const rect = letter.getBoundingClientRect();
       const distX = e.clientX - (rect.left + rect.width / 2);
       const distY = e.clientY - (rect.top + rect.height / 2);
