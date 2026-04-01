@@ -61,8 +61,10 @@
   </div>
 </div>
 <script>
-  document.querySelectorAll('.magnetic-text span').forEach(letter => {
-    document.addEventListener('mousemove', (e) => {
+  const magneticLetters = document.querySelectorAll('.magnetic-text span');
+
+  document.addEventListener('mousemove', (e) => {
+    magneticLetters.forEach(letter => {
       const rect = letter.getBoundingClientRect();
       const distX = e.clientX - (rect.left + rect.width / 2);
       const distY = e.clientY - (rect.top + rect.height / 2);
