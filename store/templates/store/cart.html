@@ -30,6 +30,7 @@
     .checkout-btn:hover { background: #16213e; }
     .empty { text-align: center; padding: 80px 20px; color: #888; }
     .empty .emoji { font-size: 64px; margin-bottom: 16px; }
+    .magnetic-text span { display: inline-block; transition: transform 0.15s ease, color 0.15s ease; }
   </style>
 </head>
 <body>
@@ -44,7 +45,7 @@
 
 <div class="container">
   <a href="/" class="back">← Continue Shopping</a>
-  <h2>🛒 Your Cart</h2>
+  <h2 class="magnetic-text"><span>🛒</span><span> </span><span>Y</span><span>o</span><span>u</span><span>r</span><span> </span><span>C</span><span>a</span><span>r</span><span>t</span></h2>
 
   {% if items %}
     {% for item in items %}
@@ -91,6 +92,24 @@
   {% endif %}
 
 </div>
-
+<script>
+  document.querySelectorAll('.magnetic-text span').forEach(letter => {
+    document.addEventListener('mousemove', (e) => {
+      const rect = letter.getBoundingClientRect();
+      const distX = e.clientX - (rect.left + rect.width / 2);
+      const distY = e.clientY - (rect.top + rect.height / 2);
+      const distance = Math.sqrt(distX * distX + distY * distY);
+      const maxDist = 150;
+      if (distance < maxDist) {
+        const force = (maxDist - distance) / maxDist;
+        letter.style.transform = `translate(${-distX * force * 0.4}px, ${-distY * force * 0.4}px)`;
+        letter.style.color = `#a78bfa`;
+      } else {
+        letter.style.transform = 'translate(0, 0)';
+        letter.style.color = '';
+      }
+    });
+  });
+</script>
 </body>
 </html>
