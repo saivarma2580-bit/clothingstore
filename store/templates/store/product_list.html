@@ -84,7 +84,7 @@
 </div>
 
 <script>
-  const magneticLetters = document.querySelectorAll('.magnetic-text span');
+  const magneticLetters = document.querySelectorAll('#heroText span');
 
   document.addEventListener('mousemove', (e) => {
     magneticLetters.forEach(letter => {
@@ -99,7 +99,7 @@
         letter.style.color = `#a78bfa`;
       } else {
         letter.style.transform = 'translate(0, 0)';
-        letter.style.color = '';
+        letter.style.color = 'white';
       }
     });
   });
