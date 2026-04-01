@@ -20,6 +20,7 @@
     .total { display: flex; justify-content: space-between; font-size: 18px; font-weight: bold; color: #1a1a2e; padding-top: 16px; }
     .btn { display: inline-block; padding: 14px 32px; background: #1a1a2e; color: white; text-decoration: none; border-radius: 10px; font-size: 15px; font-weight: bold; }
     .btn:hover { background: #16213e; }
+    .magnetic-text span { display: inline-block; transition: transform 0.15s ease, color 0.15s ease; }
   </style>
 </head>
 <body>
@@ -35,7 +36,7 @@
 <div class="container">
   <div class="card">
     <div class="icon">✅</div>
-    <h2>Order Confirmed!</h2>
+    <h2 class="magnetic-text"><span>O</span><span>r</span><span>d</span><span>e</span><span>r</span><span>&nbsp;</span><span>C</span><span>o</span><span>n</span><span>f</span><span>i</span><span>r</span><span>m</span><span>e</span><span>d</span><span>!</span></h2>
     <p class="sub">Thank you {{ order.first_name }}! Your order #{{ order.pk }} has been placed successfully.</p>
 
     <div class="details">
@@ -59,6 +60,31 @@
     <a href="/" class="btn">Continue Shopping →</a>
   </div>
 </div>
+<script>
+  // Split product name into letters
+  const title = "{{ product.name }}";
+  const titleEl = document.getElementById('productTitle');
+  titleEl.innerHTML = title.split('').map(c =>
+    c === ' ' ? '<span>&nbsp;</span>' : `<span>${c}</span>`
+  ).join('');
 
+  document.querySelectorAll('.magnetic-text span').forEach(letter => {
+    document.addEventListener('mousemove', (e) => {
+      const rect = letter.getBoundingClientRect();
+      const distX = e.clientX - (rect.left + rect.width / 2);
+      const distY = e.clientY - (rect.top + rect.height / 2);
+      const distance = Math.sqrt(distX * distX + distY * distY);
+      const maxDist = 150;
+      if (distance < maxDist) {
+        const force = (maxDist - distance) / maxDist;
+        letter.style.transform = `translate(${-distX * force * 0.4}px, ${-distY * force * 0.4}px)`;
+        letter.style.color = `#a78bfa`;
+      } else {
+        letter.style.transform = 'translate(0, 0)';
+        letter.style.color = '';
+      }
+    });
+  });
+</script>
 </body>
 </html>
