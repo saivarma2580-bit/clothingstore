@@ -84,24 +84,22 @@
 </div>
 
 <script>
-  const letters = document.querySelectorAll('#heroText span');
+  const magneticLetters = document.querySelectorAll('.magnetic-text span');
 
   document.addEventListener('mousemove', (e) => {
-    letters.forEach(letter => {
+    magneticLetters.forEach(letter => {
       const rect = letter.getBoundingClientRect();
-      const letterX = rect.left + rect.width / 2;
-      const letterY = rect.top + rect.height / 2;
-      const distX = e.clientX - letterX;
-      const distY = e.clientY - letterY;
+      const distX = e.clientX - (rect.left + rect.width / 2);
+      const distY = e.clientY - (rect.top + rect.height / 2);
       const distance = Math.sqrt(distX * distX + distY * distY);
       const maxDist = 150;
       if (distance < maxDist) {
         const force = (maxDist - distance) / maxDist;
         letter.style.transform = `translate(${-distX * force * 0.4}px, ${-distY * force * 0.4}px)`;
-        letter.style.color = `rgba(167, 139, 250, ${force + 0.5})`;
+        letter.style.color = `#a78bfa`;
       } else {
         letter.style.transform = 'translate(0, 0)';
-        letter.style.color = 'white';
+        letter.style.color = '';
       }
     });
   });
