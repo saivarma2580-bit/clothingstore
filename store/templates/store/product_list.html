@@ -23,6 +23,39 @@
     .card-body a { display: block; text-align: center; margin-top: 12px; padding: 10px; background: #1a1a2e; color: white; text-decoration: none; border-radius: 8px; font-size: 14px; }
     .card-body a:hover { background: #16213e; }
     .no-image { width: 100%; height: 260px; background: #e0e0e0; display: flex; align-items: center; justify-content: center; color: #999; font-size: 40px; }
+    .hero {
+  text-align: center;
+  padding: 60px 20px 40px;
+  background: #1a1a2e;
+  color: white;
+}
+.hero-text {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2px;
+  font-size: 64px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  cursor: default;
+  user-select: none;
+}
+.hero-text span {
+  display: inline-block;
+  transition: transform 0.1s ease;
+  color: white;
+}
+.hero-text span:hover {
+  color: #a78bfa;
+}
+.hero-sub {
+  font-size: 16px;
+  color: #94a3b8;
+  margin-top: 16px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
   </style>
 </head>
 <body>
@@ -34,6 +67,14 @@
     <a href="/cart/">Cart 🛒</a>
   </nav>
 </header>
+
+<!-- HERO SECTION -->
+<div class="hero">
+  <div class="hero-text" id="heroText">
+    StyleHub
+  </div>
+  <div class="hero-sub">Premium Fashion — Discover Your Style</div>
+</div>
 
 <div class="container">
   <!-- CATEGORY FILTERS -->
@@ -70,6 +111,48 @@
   </div>
   {% endif %}
 </div>
+<script>
+  // Split text into individual letters
+  const heroText = document.getElementById('heroText');
+  const text = heroText.innerText;
+  heroText.innerHTML = text.split('').map(char =>
+    char === ' ' ? '<span>&nbsp;</span>' : `<span>${char}</span>`
+  ).join('');
 
+  // Magnetic effect
+  const letters = heroText.querySelectorAll('span');
+
+  document.addEventListener('mousemove', (e) => {
+    letters.forEach(letter => {
+      const rect = letter.getBoundingClientRect();
+      const letterX = rect.left + rect.width / 2;
+      const letterY = rect.top + rect.height / 2;
+
+      const distX = e.clientX - letterX;
+      const distY = e.clientY - letterY;
+      const distance = Math.sqrt(distX * distX + distY * distY);
+
+      const maxDist = 150;
+      if (distance < maxDist) {
+        const force = (maxDist - distance) / maxDist;
+        const moveX = -distX * force * 0.4;
+        const moveY = -distY * force * 0.4;
+        letter.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        letter.style.color = `rgba(167, 139, 250, ${force})`;
+      } else {
+        letter.style.transform = 'translate(0, 0)';
+        letter.style.color = 'white';
+      }
+    });
+  });
+
+  // Reset when mouse leaves
+  document.addEventListener('mouseleave', () => {
+    letters.forEach(letter => {
+      letter.style.transform = 'translate(0, 0)';
+      letter.style.color = 'white';
+    });
+  });
+</script>
 </body>
 </html>
