@@ -20,6 +20,7 @@
     .btn { display: block; text-align: center; padding: 14px; background: #1a1a2e; color: white; text-decoration: none; border-radius: 10px; font-size: 16px; font-weight: bold; }
     .btn:hover { background: #16213e; }
     .back { display: inline-block; margin-bottom: 20px; color: #1a1a2e; text-decoration: none; font-size: 14px; }
+    .magnetic-text span { display: inline-block; transition: transform 0.15s ease, color 0.15s ease; }
   </style>
 </head>
 <body>
@@ -45,7 +46,7 @@
     </div>
     <div class="info">
       <div class="category">{{ product.category }}</div>
-      <h2>{{ product.name }}</h2>
+      <h2 class="magnetic-text" id="productTitle"></h2>
       <div class="price">S${{ product.price }}</div>
       <div class="desc">{{ product.description }}</div>
       <div class="stock">✅ {{ product.stock }} items in stock</div>
@@ -54,6 +55,31 @@
     </div>
   </div>
 </div>
+<script>
+  // Split product name into letters
+  const title = "{{ product.name }}";
+  const titleEl = document.getElementById('productTitle');
+  titleEl.innerHTML = title.split('').map(c =>
+    c === ' ' ? '<span>&nbsp;</span>' : `<span>${c}</span>`
+  ).join('');
 
+  document.querySelectorAll('.magnetic-text span').forEach(letter => {
+    document.addEventListener('mousemove', (e) => {
+      const rect = letter.getBoundingClientRect();
+      const distX = e.clientX - (rect.left + rect.width / 2);
+      const distY = e.clientY - (rect.top + rect.height / 2);
+      const distance = Math.sqrt(distX * distX + distY * distY);
+      const maxDist = 150;
+      if (distance < maxDist) {
+        const force = (maxDist - distance) / maxDist;
+        letter.style.transform = `translate(${-distX * force * 0.4}px, ${-distY * force * 0.4}px)`;
+        letter.style.color = `#a78bfa`;
+      } else {
+        letter.style.transform = 'translate(0, 0)';
+        letter.style.color = '';
+      }
+    });
+  });
+</script>
 </body>
 </html>
