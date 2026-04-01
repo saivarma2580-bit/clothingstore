@@ -50,7 +50,11 @@
   {% if items %}
     {% for item in items %}
     <div class="cart-item">
-      <div class="emoji">👕</div>
+      {% if item.product.image %}
+<img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;">
+{% else %}
+<div class="emoji">👕</div>
+{% endif %}
       <div class="info">
         <h3>{{ item.product.name }}</h3>
         <div class="category">{{ item.product.category }} · Size: {{ item.product.sizes }}</div>
