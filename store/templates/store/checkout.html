@@ -93,13 +93,6 @@
   </div>
 </div>
 <script>
-  // Split product name into letters
-  const title = "{{ product.name }}";
-  const titleEl = document.getElementById('productTitle');
-  titleEl.innerHTML = title.split('').map(c =>
-    c === ' ' ? '<span>&nbsp;</span>' : `<span>${c}</span>`
-  ).join('');
-
   document.querySelectorAll('.magnetic-text span').forEach(letter => {
     document.addEventListener('mousemove', (e) => {
       const rect = letter.getBoundingClientRect();
